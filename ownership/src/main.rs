@@ -4,6 +4,10 @@ fn main() {
 
     ownership_fn();
     ownership_return();
+
+    ownership_reference();
+    ownership_mut_reference();
+    ownership_slice_type();
 }
 
 fn move_string(){
@@ -63,3 +67,48 @@ fn ownership_return(){
         a_string // a_string이 반환되고 호출자 함수 쪽으로 이동한다.
     }
 } // s1, s3는 스코프 밖으로 벗어나며 버려진다. 이미 이동된 s2는 아무일도 일어나지 않는다
+
+fn ownership_reference(){
+    let s1 = String::from("hello");
+    let len = calculate_length(&s1);
+
+    println!("The length of {} is {} : 참조자를 넘기면 소유권 이전이 일어나지 않고 참조(대여) 할 수 있도록 해준다.", s1, len);
+
+    fn calculate_length(s:&String) -> usize{
+        s.len()
+    }
+}
+
+fn ownership_mut_reference(){
+    let mut s = String::from("hello");
+
+    change(&mut s);
+
+    println!("mut reference를 넘겨야 값을 바꿀 수 있다");
+    println!("mut ref는 한개만 생성가능하며, 두개는 생성이 불가하다. 이 특성으로 인해 race condition을 방지한다.");
+
+    fn change(some_string: &mut String){
+        some_string.push_str(", world");
+    }
+}
+
+fn ownership_slice_type(){
+
+    let mut s = String::from("hello world");
+
+    let word = first_word(&s);
+
+    fn first_word(s: &String) -> &str {
+        let bytes = s.as_bytes();
+
+        for(i, &item) in bytes.iter().enumerate() {
+            if item == b' '{
+                return &s[0..i];
+            }
+        }
+
+        &s[..]
+    }
+
+    println!("참조 방식을 반환해여 해당 문자열을 다뤄도 값을 유지시킬수 있다(컴파일 타임 안전 보장) : {word}")
+}
