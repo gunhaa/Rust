@@ -1,3 +1,5 @@
+![ferris](/docs/images/rustacean-flat-happy.png)
+
 - 설치 확인
 ```shell
 $ rustc --version
