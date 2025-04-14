@@ -31,7 +31,7 @@ fn main() {
 
     mutex();
 
-    mutex_shared
+    mutex_shared();
 }
 
 fn thread_borrow(){
